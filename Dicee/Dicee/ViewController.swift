@@ -10,9 +10,11 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    let diceArray = ["dice1", "dice2", "dice3", "dice4", "dice5", "dice6"]
+    
     var randomDiceIndexLeft : Int = 0
     var randomDiceIndexRight : Int = 0
-
+    
     @IBOutlet weak var diceImageViewLeft: UIImageView!
     @IBOutlet weak var diceImageViewRight: UIImageView!
     
@@ -27,6 +29,9 @@ class ViewController: UIViewController {
         
         print("Left random number:" + String(randomDiceIndexLeft))
         print("Right random number:" + String(randomDiceIndexRight))
+        
+        diceImageViewLeft.image = UIImage.init(named: diceArray[randomDiceIndexLeft])
+        diceImageViewRight.image = UIImage.init(named: diceArray[randomDiceIndexRight])
     }
 
 }
