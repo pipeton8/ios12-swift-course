@@ -15,4 +15,4 @@ func fibonacci(until totalFibonacciNumbersToGet : Int) {
     }
 }
 
-fibonacci(until: 5)
+fibonacci(until: 10)
