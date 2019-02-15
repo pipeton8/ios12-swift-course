@@ -1,6 +1,6 @@
 //
 //  ViewController.swift
-//  Destiny
+//  Destini
 //
 //  Created by Felipe Del Canto Monge on 2/14/19.
 //  Copyright © 2019 Felipe Del Canto. All rights reserved.
