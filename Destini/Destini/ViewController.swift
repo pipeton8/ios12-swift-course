@@ -26,7 +26,7 @@ class ViewController: UIViewController {
 
     // User presses one of the buttons
     @IBAction func buttonPressed(_ sender: UIButton) {
-        if currentStory.isFinal() {
+        if currentStory.isFinal {
             StartOver()
         } else {
             let answerIndex = sender.tag - 1
@@ -45,7 +45,7 @@ class ViewController: UIViewController {
     }
     
     func SetButtonsText() {
-        if !currentStory.isFinal() {
+        if !currentStory.isFinal {
             topButton.setTitle(currentStory.answers[0], for: .normal)
             bottomButton.setTitle(currentStory.answers[1], for: .normal)
         } else {

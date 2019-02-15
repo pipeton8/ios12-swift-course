@@ -11,6 +11,7 @@ import Foundation
 class Story {
     
     let text : String
+    let isFinal : Bool
     var answers = [String]()
     var consequences = [Int]() // answers[i] leads to story consequences[i]
     
@@ -20,7 +21,6 @@ class Story {
             self.answers.append(answer)
             self.consequences.append(consequence)
         }
+        isFinal = answers.count == 0
     }
-    
-    func isFinal() -> Bool { return answers.count == 0}
 }
