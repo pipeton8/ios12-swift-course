@@ -7,15 +7,16 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
 
 class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     
-
-    
-    
     let baseURL = "https://apiv2.bitcoinaverage.com/indices/global/ticker/BTC"
     let currencyArray = ["Choose...", "AUD", "BRL","CAD","CNY","EUR","GBP","HKD","IDR","ILS","INR","JPY","MXN","NOK","NZD","PLN","RON","RUB","SEK","SGD","USD","ZAR"]
+    let currencySymbols = ["$", "R$", "$", "¥", "€", "£", "$", "Rp", "₪", "₹", "¥", "$", "kr", "$", "zł", "lei", "₽", "kr", "$", "$", "R"]
     var finalURL = ""
+    var currencySymbol = ""
 
     //Pre-setup IBOutlets
     @IBOutlet weak var bitcoinPriceLabel: UILabel!
@@ -23,15 +24,19 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        SetupPickerViewDelegate()
-        bitcoinPriceLabel.text = "Waiting..."
-       
-    }
-    
-    //UIPickerView methods
-    func SetupPickerViewDelegate() {
         currencyPicker.dataSource = self
         currencyPicker.delegate = self
+        bitcoinPriceLabel.text = "Waiting..."
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        if row == 0 {
+            bitcoinPriceLabel.text = "Waiting..."
+        } else {
+            currencySymbol = currencySymbols[row]
+            finalURL = baseURL + currencyArray[row]
+            getPriceData(url: finalURL)
+        }
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
@@ -46,52 +51,31 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         return 1
     }
      
-//    
-//    //MARK: - Networking
-//    /***************************************************************/
-//    
-//    func getWeatherData(url: String, parameters: [String : String]) {
-//        
-//        Alamofire.request(url, method: .get, parameters: parameters)
-//            .responseJSON { response in
-//                if response.result.isSuccess {
-//
-//                    print("Sucess! Got the weather data")
-//                    let weatherJSON : JSON = JSON(response.result.value!)
-//
-//                    self.updateWeatherData(json: weatherJSON)
-//
-//                } else {
-//                    print("Error: \(String(describing: response.result.error))")
-//                    self.bitcoinPriceLabel.text = "Connection Issues"
-//                }
-//            }
-//
-//    }
-//
-//    
-//    
-//    
-//    
-//    //MARK: - JSON Parsing
-//    /***************************************************************/
-//    
-//    func updateWeatherData(json : JSON) {
-//        
-//        if let tempResult = json["main"]["temp"].double {
-//        
-//        weatherData.temperature = Int(round(tempResult!) - 273.15)
-//        weatherData.city = json["name"].stringValue
-//        weatherData.condition = json["weather"][0]["id"].intValue
-//        weatherData.weatherIconName =    weatherData.updateWeatherIcon(condition: weatherData.condition)
-//        }
-//        
-//        updateUIWithWeatherData()
-//    }
-//    
-
-
-
-
+    
+    //MARK: - Networking
+    /***************************************************************/
+    
+    func getPriceData(url: String) {
+        
+        Alamofire.request(url, method: .get) .responseJSON {
+            response in
+            if response.result.isSuccess {
+                let priceJSON : JSON = JSON(response.result.value!)
+                if let price = priceJSON["last"].double {
+                    self.updateUI(price: price, symbol: self.currencySymbol)
+                }
+            } else {
+                print("Error: \(String(describing: response.result.error))")
+                self.bitcoinPriceLabel.text = "Connection Issues"
+            }
+        }
+    }
+    
+    //MARK: - JSON Parsing and UI update
+    /***************************************************************/
+    
+    func updateUI(price : Double, symbol : String) {
+        bitcoinPriceLabel.text = symbol + "\(price)"
+    }
 }
 
