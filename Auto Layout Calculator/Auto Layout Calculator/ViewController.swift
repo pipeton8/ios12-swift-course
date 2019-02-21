@@ -14,13 +14,15 @@ class ViewController: UIViewController {
     @IBOutlet weak var deleteButton: UIButton!
 
     let maxNumbersOnScreen : Int = 8
+    let whiteColor = UIColor.white
+    let orangeColor = UIColor.init(red: 1, green: 0.58, blue: 0, alpha: 1)
     
     var partialResult : Float = 0
     var screenText : String = "0"
     var waitingForSecondNumber : Bool = false
     var deleteAll : Bool = true
     var dotPressed : Bool = false
-    var currentOperationTag : Int = 0
+    var lastOperationPressed : UIButton?
     var lastSecondNumber : Float = 0
     
     override func viewDidLoad() {
@@ -50,9 +52,13 @@ class ViewController: UIViewController {
         }
         
         UpdateUI()
+        
         waitingForSecondNumber = true
         screenText = "0"
-        currentOperationTag = sender.tag
+
+        OperationButtonColors(reverse: false)
+        lastOperationPressed = sender
+        OperationButtonColors(reverse: true)
     }
     
     @IBAction func equalPressed(_ sender: UIButton) {
@@ -60,9 +66,13 @@ class ViewController: UIViewController {
             lastSecondNumber = Float(screenText)!
         }
         CalculateResult()
+        screenText = FormatToString(partialResult)
+
+        OperationButtonColors(reverse: false)
+
         waitingForSecondNumber = false
         dotPressed = false
-        screenText = FormatToString(partialResult)
+
         UpdateUI()
     }
     
@@ -90,6 +100,8 @@ class ViewController: UIViewController {
         } else { deleteAll = true }
         screenText = "0"
         dotPressed = false
+        
+        OperationButtonColors(reverse: false)
         UpdateUI()
     }
     
@@ -108,13 +120,13 @@ class ViewController: UIViewController {
          tag 2 is *
          tag 3 is ÷
          */
-        if currentOperationTag == 0 {
+        if lastOperationPressed?.tag == 0 {
             partialResult += lastSecondNumber
-        } else if currentOperationTag == 1 {
+        } else if lastOperationPressed?.tag == 1 {
             partialResult -= lastSecondNumber
-        } else if currentOperationTag == 2 {
+        } else if lastOperationPressed?.tag == 2 {
             partialResult *= lastSecondNumber
-        } else if currentOperationTag == 3 {
+        } else if lastOperationPressed?.tag == 3 {
             partialResult /= lastSecondNumber
         }
     }
@@ -133,6 +145,17 @@ class ViewController: UIViewController {
         else { deleteButton.setTitle("C", for: .normal) }
         resultLabel.text = screenText
     }
+    
+    fileprivate func OperationButtonColors(reverse : Bool) {
+        if reverse {
+            lastOperationPressed?.backgroundColor = whiteColor
+            lastOperationPressed?.setTitleColor(orangeColor, for: .normal)
+        } else {
+            lastOperationPressed?.backgroundColor = orangeColor
+            lastOperationPressed?.setTitleColor(whiteColor, for: .normal)
+        }
+    }
+
     
 }
 
