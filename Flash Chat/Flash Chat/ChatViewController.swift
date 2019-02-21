@@ -24,7 +24,8 @@ class ChatViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        navigationItem.hidesBackButton = true
+
         //TODO: Set yourself as the delegate and datasource here:
         
         

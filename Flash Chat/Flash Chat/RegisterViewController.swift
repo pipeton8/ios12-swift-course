@@ -6,10 +6,11 @@
 //
 
 import UIKit
-
+import FirebaseAuth
 
 class RegisterViewController: UIViewController {
 
+    let CHAT_SEGUE = "goToChat"
     
     //Pre-linked IBOutlets
 
@@ -28,16 +29,14 @@ class RegisterViewController: UIViewController {
 
   
     @IBAction func registerPressed(_ sender: AnyObject) {
-        
-
-        
-        //TODO: Set up a new user on our Firbase database
-        
-        
-
-        
-        
-    } 
-    
-    
+        Auth.auth().createUser(withEmail: emailTextfield.text!, password: passwordTextfield.text!) {
+            (user, error) in
+            if error != nil {
+                print(error!)
+            } else {
+                self.performSegue(withIdentifier: self.CHAT_SEGUE, sender: self)
+                print("Registration Succesful")
+            }
+        }
+    }
 }
