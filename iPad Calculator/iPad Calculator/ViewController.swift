@@ -22,6 +22,7 @@ class ViewController: UIViewController {
     var waitingForSecondNumber : Bool = false
     var deleteAll : Bool = true
     var dotPressed : Bool = false
+    var showingResult : Bool = false
     var lastOperationPressed : UIButton?
     var lastSecondNumber : Float = 0
     
@@ -33,14 +34,19 @@ class ViewController: UIViewController {
 
     @IBAction func numberPressed(_ sender: UIButton) {
         let totalNumbersOnScreen = screenText.count - Int(truncating: NSNumber(value:dotPressed))
-        if totalNumbersOnScreen < maxNumbersOnScreen {
-            if screenText == "0" && sender.tag != 0 {
+        if showingResult {
+            screenText = "\(sender.tag)"
+            showingResult = false
+        } else if totalNumbersOnScreen < maxNumbersOnScreen {
+            if screenText == "0" {
                 screenText = "\(sender.tag)"
-                deleteAll = false
+                if sender.tag != 0 || waitingForSecondNumber { deleteAll = false }
+            } else {
+                screenText += "\(sender.tag)"
             }
-            else { screenText += "\(sender.tag)" }
-            UpdateUI()
         }
+        UpdateUI()
+
     }
     
     @IBAction func operationPressed(_ sender: UIButton) {
@@ -72,6 +78,7 @@ class ViewController: UIViewController {
 
         waitingForSecondNumber = false
         dotPressed = false
+        showingResult = true
 
         UpdateUI()
     }

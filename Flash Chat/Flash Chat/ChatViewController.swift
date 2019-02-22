@@ -8,7 +8,8 @@
 
 import UIKit
 import Firebase
-
+import SVProgressHUD
+import ChameleonFramework
 
 class ChatViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
     
@@ -47,6 +48,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        SVProgressHUD.show()
         AddKeyboardObservers()
     }
     
@@ -76,10 +78,16 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CUSTOM_MESSAGE_CELL, for : indexPath) as! CustomMessageCell
         let messageToDisplay = messageArray[indexPath.row]
-        cell.messageBody.text = messageToDisplay.messageBody
+        cell.messageBody.text = messageToDisplay.body
         cell.senderUsername.text = messageToDisplay.sender
         cell.avatarImageView.image = UIImage(named: "egg")
-        
+        if messageToDisplay.sender == Auth.auth().currentUser?.email! {
+            cell.avatarImageView.backgroundColor = UIColor.flatMint()
+            cell.messageBackground.backgroundColor = UIColor.flatSkyBlue()
+        } else {
+            cell.avatarImageView.backgroundColor = UIColor.flatRed()
+            cell.messageBackground.backgroundColor = UIColor.flatGray()
+        }
         return cell
     }
 
@@ -188,6 +196,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.messageArray.append(message)
             self.ConfigureTableView()
             self.messageTableView.reloadData()
+            SVProgressHUD.dismiss()
         }
         
     }
