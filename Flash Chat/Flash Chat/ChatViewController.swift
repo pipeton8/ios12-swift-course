@@ -133,25 +133,18 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         heightConstraint.constant = SEND_MESSAGE_HEIGHT
         AnimateKeyboard()
     }
-    
-    ///////////////////////////////////////////
 
-    //MARK: - Send & Recieve from Firebase
-    
-    
-    
-    
-    
     fileprivate func DismissKeyboard() {
         messageTextfield.endEditing(true)
         messageTextfield.resignFirstResponder()
     }
-    
+
+    ///////////////////////////////////////////
+
+    //MARK: - Send & Recieve from Firebase
     @IBAction func sendPressed(_ sender: AnyObject) {
         DismissKeyboard()
         RequestSendMessage()
-        
-        
     }
 
     fileprivate func RequestSendMessage() {
@@ -198,7 +191,6 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.messageTableView.reloadData()
             SVProgressHUD.dismiss()
         }
-        
     }
     
     @IBAction func logOutPressed(_ sender: AnyObject) {

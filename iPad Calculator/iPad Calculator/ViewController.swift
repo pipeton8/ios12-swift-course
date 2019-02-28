@@ -60,6 +60,7 @@ class ViewController: UIViewController {
         UpdateUI()
         
         waitingForSecondNumber = true
+        dotPressed = false
         screenText = "0"
 
         OperationButtonColors(reverse: false)
